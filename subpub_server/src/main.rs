@@ -5,10 +5,18 @@ use tokio::net::UdpSocket;
 // Mutex is no longer needed from tokio::sync for Subscribers
 use log::{info, warn, error};
 use dashmap::DashMap; // Import DashMap
+use std::net::{IpAddr, Ipv4Addr}; // Added Ipv4Addr for multicast
 
 // TODO: Make IP address and port configurable via command-line arguments or a config file.
 /// The default IP address and port the UDP server will bind to.
 pub const BIND_ADDRESS: &str = "127.0.0.1:7878";
+/// Multicast address for discovery
+pub const MULTICAST_ADDRESS: &str = "239.0.0.100:50100"; // New, less common multicast address
+/// Message to expect for discovery
+pub const DISCOVERY_MESSAGE: &str = "DISCOVER_SUBPUB_SERVER";
+/// Response message for discovery
+pub const DISCOVERY_RESPONSE_PREFIX: &str = "SUBPUB_SERVER_AT:";
+
 
 /// A type alias for the shared, thread-safe data structure holding channel subscriptions.
 ///
@@ -109,16 +117,14 @@ async fn run_server_processing_loop(
 
                     if !subs_to_notify.is_empty() {
                         for subscriber_addr in subs_to_notify {
-                            if subscriber_addr != addr { // Don't send to self
-                                info!("Forwarding message to subscriber {} on channel '{}'", subscriber_addr, channel_name);
-                                if let Err(e) = socket.send_to(p.as_bytes(), subscriber_addr).await {
-                                    error!("Failed to send message to {}: {}", subscriber_addr, e);
-                                    // TODO: Consider removing unresponsive subscribers after several failures
-                                }
+                            info!("Forwarding message to subscriber {} on channel '{}'", subscriber_addr, channel_name);
+                            if let Err(e) = socket.send_to(p.as_bytes(), subscriber_addr).await {
+                                error!("Failed to send message to {}: {}", subscriber_addr, e);
+                                // TODO: Consider removing unresponsive subscribers after several failures
                             }
                         }
                     } else {
-                        info!("No subscribers for channel '{}' or only self. Message not forwarded.", channel_name);
+                        info!("No subscribers for channel '{}'. Message not forwarded.", channel_name);
                     }
                 } else {
                     warn!("PUB action from {} to channel '{}' without payload.", addr, channel_name);
@@ -131,6 +137,47 @@ async fn run_server_processing_loop(
         }
     }
     // This loop is infinite, so Ok(()) is effectively unreachable.
+}
+
+/// Spawns a task to listen for multicast discovery messages.
+async fn run_multicast_discovery_listener(
+    main_server_bind_address: String,
+) -> Result<(), Box<dyn std::error::Error + Send + Sync + 'static>> {
+    info!("Starting multicast discovery listener on {}", MULTICAST_ADDRESS);
+
+    let listen_addr_str = MULTICAST_ADDRESS.split(':').collect::<Vec<&str>>()[1];
+    let listen_port: u16 = listen_addr_str.parse()?;
+    let listen_ip = "0.0.0.0"; // Listen on all interfaces for multicast
+
+    let socket = UdpSocket::bind(format!("{}:{}", listen_ip, listen_port)).await?;
+    
+    let multicast_group_addr: Ipv4Addr = MULTICAST_ADDRESS.split(':').collect::<Vec<&str>>()[0].parse()?;
+    // This depends on the OS and network configuration. For simplicity, we assume it works.
+    // For robust multicast, more socket options might be needed (e.g., IP_MULTICAST_LOOP, IP_MULTICAST_TTL)
+    // and potentially using `socket2` crate for more control.
+    // Tokios UdpSocket join_multicast_v4 takes an IpAddr, which should be the multicast group,
+    // and an interface IP to join on. Using 0.0.0.0 for the interface IP.
+    let interface_to_join_on = Ipv4Addr::new(0,0,0,0); // "any" interface
+    socket.join_multicast_v4(multicast_group_addr, interface_to_join_on)?;
+    info!("Joined multicast group {} on interface {}", multicast_group_addr, interface_to_join_on);
+
+
+    let mut buf = [0; 1024];
+    loop {
+        let (len, src_addr) = socket.recv_from(&mut buf).await?;
+        let message = std::str::from_utf8(&buf[..len])?.trim();
+
+        if message == DISCOVERY_MESSAGE {
+            info!("Received discovery ping from {}", src_addr);
+            let response = format!("{} {}", DISCOVERY_RESPONSE_PREFIX, main_server_bind_address);
+            socket.send_to(response.as_bytes(), src_addr).await?;
+            info!("Sent discovery response to {}: {}", src_addr, response);
+        } else {
+            // Optional: log non-discovery messages if needed for debugging
+            warn!("Received unknown multicast message from {}: {}", src_addr, message);
+        }
+    }
+    // Unreachable in normal operation
 }
 
 /// The main entry point for the SubPub UDP server application.
@@ -154,8 +201,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync + 'static>
 
     // If RUST_LOG is not set, default to info for this crate and warn for others.
     if std::env::var("RUST_LOG").is_err() {
-        log_builder.filter_module(module_path!(), log::LevelFilter::Info)
-                   .filter_level(log::LevelFilter::Warn);
+        log_builder.filter_module(module_path!(), log::LevelFilter::Info) // Set current crate to info
+                   .filter_level(log::LevelFilter::Info); // Set default for all others to info
     }
     log_builder.init();
 
@@ -163,14 +210,30 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync + 'static>
     info!("=================================================");
     info!("🚀 Starting SubPub UDP Server v0.1.0");
     info!("=================================================");
-    info!("Attempting to bind to: {}", BIND_ADDRESS);
 
-    let socket = Arc::new(UdpSocket::bind(BIND_ADDRESS).await?);
+    let local_ip = local_ip_address::local_ip().unwrap_or_else(|e| {
+        warn!("Could not get local IP address: {}. Defaulting to 127.0.0.1", e);
+        IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1))
+    });
+    
+    let port_str = BIND_ADDRESS.split(':').last().unwrap_or("7878");
+    let actual_bind_address = format!("{}:{}", local_ip, port_str);
+
+    info!("Attempting to bind main server to: {}", actual_bind_address);
+
+    let socket = Arc::new(UdpSocket::bind(&actual_bind_address).await?);
     let actual_addr = socket.local_addr()?;
-    info!("✅ Server successfully bound and listening on: {}", actual_addr);
+    info!("✅ Main server successfully bound and listening on: {}", actual_addr);
     info!("Awaiting incoming UDP messages...");
     info!("-------------------------------------------------");
 
+    // Spawn multicast discovery listener
+    let discovery_main_server_addr = actual_addr.to_string();
+    tokio::spawn(async move {
+        if let Err(e) = run_multicast_discovery_listener(discovery_main_server_addr).await {
+            error!("Multicast discovery listener failed: {}", e);
+        }
+    });
 
     let subscribers: Subscribers = Arc::new(DashMap::new()); // Use DashMap
 
@@ -189,7 +252,6 @@ mod tests {
     use super::*;
     use std::net::{IpAddr, Ipv4Addr};
     use std::collections::HashMap; // Keep for process_message_logic test helper
-    use env_logger; // For initializing logger in tests if needed, or ensuring it doesn't conflict
     use tokio::time::{sleep, Duration};
 
     fn create_mock_addr(port: u16) -> SocketAddr {
