@@ -1,0 +1,27 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "CircuitPython: Sync Project & Update Libs (circup)",
+            "type": "shell",
+            // 1. Sync code.py to device root.
+            // 2. Run 'circup install --auto' to manage community libraries on the device.
+            // 3. Sync local custom libraries from client/src/lib/ to device's lib/ folder.
+            "command": "rsync -avh \"${workspaceFolder}/client/src/code.py\" \"/Volumes/CIRCUITPY/\" && circup install --auto && rsync -avh \"${workspaceFolder}/client/src/lib/\" \"/Volumes/CIRCUITPY/lib/\"",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true // Set as default build task if desired
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "detail": "Syncs code.py, runs 'circup install --auto', then syncs client/src/lib/. Ensure circup is installed."
+        }
+    ]
+}
