@@ -1,0 +1,282 @@
+2025-06-04 02:11:46.247 UTC [INFO] subpub_server - Starting SubPub Tray Icon Application...
+2025-06-04 02:11:46.257 UTC [INFO] subpub_server - Tray icon created. Application running in background.
+2025-06-04 02:17:25.739 UTC [INFO] subpub_server - Starting SubPub Tray Icon Application...
+2025-06-04 02:17:25.742 UTC [INFO] subpub_server - Tray icon created. Application running in background.
+2025-06-04 02:28:28.185 UTC [INFO] subpub_server - Starting SubPub Tray Icon Application...
+2025-06-04 02:28:28.194 UTC [INFO] subpub_server - Tray icon created. Application running in background.
+2025-06-04 02:30:14.560 UTC [INFO] subpub_server - Starting SubPub Tray Icon Application...
+2025-06-04 02:30:14.563 UTC [INFO] subpub_server - Tray icon created. Application running in background.
+2025-06-04 02:35:10.485 UTC [INFO] subpub_server - Starting SubPub Tray Icon Application...
+2025-06-04 02:35:10.488 UTC [INFO] subpub_server - Tray icon created. Application running in background.
+2025-06-04 02:37:35.952 UTC [INFO] subpub_server - Starting SubPub Tray Icon Application...
+2025-06-04 02:37:35.956 UTC [INFO] subpub_server - Tray icon created. Application running in background. Waiting for quit signal...
+2025-06-04 02:38:06.356 UTC [INFO] subpub_server - Starting SubPub Tray Icon Application...
+2025-06-04 02:38:06.359 UTC [INFO] subpub_server - Tray icon created. Application running in background. Waiting for quit signal...
+2025-06-04 02:39:27.451 UTC [INFO] subpub_server - Starting SubPub Tray Icon Application...
+2025-06-04 02:39:27.453 UTC [INFO] subpub_server - Tray icon created. Application running in background. Waiting for quit signal...
+2025-06-04 02:48:56.169 UTC [INFO] subpub_server - Starting SubPub Tray Icon Application with tray-icon...
+2025-06-04 02:48:56.292 UTC [INFO] subpub_server - Tray icon created. Application running in background.
+2025-06-04 02:56:19.561 UTC [INFO] subpub_server - Starting SubPub Tray Icon Application with tray-icon...
+2025-06-04 02:56:19.646 UTC [INFO] subpub_server - Tray icon created. Starting tao event loop.
+2025-06-04 02:56:21.461 UTC [INFO] subpub_server - Tray event: Enter { id: TrayIconId("1"), position: PhysicalPosition { x: 2464.0390625, y: 63.15625 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:21.469 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2463.515625, y: 62.6328125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:21.477 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2462.9921875, y: 62.109375 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:23.050 UTC [INFO] subpub_server - Tray event: Click { id: TrayIconId("1"), position: PhysicalPosition { x: 2462.9921875, y: 62.109375 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } }, button: Left, button_state: Down }
+2025-06-04 02:56:24.244 UTC [INFO] subpub_server - Tray event: Leave { id: TrayIconId("1"), position: PhysicalPosition { x: 2356.8671875, y: 41.1484375 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.546 UTC [INFO] subpub_server - Tray event: Enter { id: TrayIconId("1"), position: PhysicalPosition { x: 2457.9765625, y: 62.75 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.554 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2457.9765625, y: 55.5 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.561 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2457.9765625, y: 46.84375 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.571 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2457.9765625, y: 38.1875 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.578 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2457.9765625, y: 34.4921875 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.586 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2457.9765625, y: 28.5390625 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.594 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2458.765625, y: 23.7734375 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.602 UTC [INFO] subpub_server - Tray event: Leave { id: TrayIconId("1"), position: PhysicalPosition { x: 2460.2421875, y: 20.078125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.724 UTC [INFO] subpub_server - Tray event: Enter { id: TrayIconId("1"), position: PhysicalPosition { x: 2462.1953125, y: 21.2109375 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.731 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2462.1953125, y: 21.7265625 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.740 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2461.671875, y: 22.2421875 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.748 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2461.671875, y: 22.7578125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.796 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2461.671875, y: 23.2265625 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.804 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2461.671875, y: 23.7421875 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.812 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2461.671875, y: 24.8828125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.820 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2461.671875, y: 26.0234375 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.829 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2461.671875, y: 27.8984375 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.837 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2462.2421875, y: 29.0390625 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.845 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2462.8671875, y: 30.9140625 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.853 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2463.4921875, y: 32.7890625 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.861 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2464.171875, y: 35.515625 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.869 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2464.171875, y: 37.390625 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.877 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2464.7421875, y: 38.53125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.886 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2464.7421875, y: 40.40625 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.893 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2464.7421875, y: 40.921875 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.902 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2465.3125, y: 42.0625 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.909 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2465.3125, y: 42.578125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.919 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2465.3125, y: 43.09375 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:25.956 UTC [INFO] subpub_server - Tray event: Click { id: TrayIconId("1"), position: PhysicalPosition { x: 2465.3125, y: 43.09375 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } }, button: Left, button_state: Down }
+2025-06-04 02:56:26.892 UTC [INFO] subpub_server - Tray event: Leave { id: TrayIconId("1"), position: PhysicalPosition { x: 2354.9296875, y: 61.1328125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.602 UTC [INFO] subpub_server - Tray event: Enter { id: TrayIconId("1"), position: PhysicalPosition { x: 2462.484375, y: 64.9453125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.608 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2460.6015625, y: 63.6875 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.616 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2458.71875, y: 62.4296875 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.624 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2457.5703125, y: 61.28125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.632 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2456.421875, y: 60.1328125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.640 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2455.8984375, y: 59.609375 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.648 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2455.3203125, y: 58.4609375 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.657 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2454.796875, y: 57.9375 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.665 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2454.2734375, y: 57.9375 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.673 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2454.2734375, y: 57.4140625 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.869 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2454.734375, y: 57.4140625 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.875 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2456.609375, y: 57.4140625 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.885 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2458.484375, y: 57.4140625 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.891 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2460.359375, y: 57.4140625 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.899 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2463.0859375, y: 57.4140625 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.907 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2464.9609375, y: 57.4140625 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.915 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2467.6875, y: 58.09375 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.924 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2468.828125, y: 58.09375 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.932 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2470.703125, y: 58.71875 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.940 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2471.84375, y: 58.71875 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.948 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2472.984375, y: 58.71875 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.956 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2473.5, y: 58.71875 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.964 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2474.015625, y: 58.71875 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.972 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2474.53125, y: 58.71875 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.980 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2475.046875, y: 58.71875 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:27.988 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2475.5625, y: 58.71875 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:28.053 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2475.5625, y: 59.1796875 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:28.105 UTC [INFO] subpub_server - Tray event: Click { id: TrayIconId("1"), position: PhysicalPosition { x: 2475.5625, y: 59.1796875 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } }, button: Left, button_state: Down }
+2025-06-04 02:56:30.459 UTC [INFO] subpub_server - Tray event: Leave { id: TrayIconId("1"), position: PhysicalPosition { x: 2375.9453125, y: 54.140625 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:36.416 UTC [INFO] subpub_server - Tray event: Enter { id: TrayIconId("1"), position: PhysicalPosition { x: 2483.2734375, y: 37.2578125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:36.424 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2477.3203125, y: 37.2578125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:36.432 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2473.625, y: 37.2578125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:36.441 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2468.859375, y: 37.2578125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:36.448 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2464.09375, y: 37.2578125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:36.456 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2461.359375, y: 37.2578125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:36.464 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2459.4765625, y: 37.2578125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:36.473 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2457.59375, y: 37.2578125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:36.522 UTC [INFO] subpub_server - Tray event: Click { id: TrayIconId("1"), position: PhysicalPosition { x: 2457.34375, y: 37.2578125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } }, button: Left, button_state: Down }
+2025-06-04 02:56:37.325 UTC [INFO] subpub_server - Tray event: Leave { id: TrayIconId("1"), position: PhysicalPosition { x: 2293.8984375, y: 33.8046875 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:48.377 UTC [INFO] subpub_server - Tray event: Enter { id: TrayIconId("1"), position: PhysicalPosition { x: 2455.0078125, y: 43.7421875 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:48.385 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2455.0078125, y: 30.1953125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:48.393 UTC [INFO] subpub_server - Tray event: Leave { id: TrayIconId("1"), position: PhysicalPosition { x: 2453.484375, y: 1.28125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:48.676 UTC [INFO] subpub_server - Tray event: Enter { id: TrayIconId("1"), position: PhysicalPosition { x: 2446.5859375, y: 21.6484375 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:48.684 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2446.5859375, y: 24.375 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:48.692 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2445.953125, y: 26.25 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:48.702 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2445.953125, y: 27.390625 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:48.708 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2445.953125, y: 27.90625 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:48.719 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2445.953125, y: 29.046875 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:48.724 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2445.953125, y: 29.5625 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:48.733 UTC [INFO] subpub_server - Tray event: Move { id: TrayIconId("1"), position: PhysicalPosition { x: 2445.953125, y: 30.078125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:56:48.788 UTC [INFO] subpub_server - Tray event: Click { id: TrayIconId("1"), position: PhysicalPosition { x: 2445.953125, y: 30.078125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } }, button: Left, button_state: Down }
+2025-06-04 02:56:52.975 UTC [INFO] subpub_server - Tray event: Leave { id: TrayIconId("1"), position: PhysicalPosition { x: 20.890625, y: 181.3125 }, rect: Rect { size: PhysicalSize { width: 68, height: 86 }, position: PhysicalPosition { x: 2420.0, y: 0.0 } } }
+2025-06-04 02:59:54.613 UTC [INFO] subpub_server - Starting SubPub Tray Icon Application with tray-icon...
+2025-06-04 02:59:54.614 UTC [INFO] subpub_server - Inverting icon colors...
+2025-06-04 02:59:54.703 UTC [INFO] subpub_server - Tray icon created. Starting tao event loop.
+2025-06-04 03:00:35.227 UTC [INFO] subpub_server - Attempting to start server via menu...
+2025-06-04 03:00:35.228 UTC [INFO] subpub_server - Server start initiated via menu.
+2025-06-04 03:00:35.228 UTC [INFO] subpub_server::server - =================================================
+2025-06-04 03:00:35.228 UTC [INFO] subpub_server::server - 🚀 Starting SubPub UDP Server v0.1.0
+2025-06-04 03:00:35.228 UTC [INFO] subpub_server::server - =================================================
+2025-06-04 03:00:35.228 UTC [INFO] subpub_server::server - Attempting to bind main server to: 192.168.0.253:7878
+2025-06-04 03:00:35.228 UTC [INFO] subpub_server::server - ✅ Main server successfully bound and listening on: 192.168.0.253:7878
+2025-06-04 03:00:35.228 UTC [INFO] subpub_server::server - Awaiting incoming UDP messages...
+2025-06-04 03:00:35.228 UTC [INFO] subpub_server::server - -------------------------------------------------
+2025-06-04 03:00:35.228 UTC [INFO] subpub_server::server - Starting multicast discovery listener on 239.0.0.100:50100
+2025-06-04 03:00:35.228 UTC [INFO] subpub_server::server - Joined multicast group 239.0.0.100 on interface 0.0.0.0
+2025-06-04 03:00:39.691 UTC [INFO] subpub_server - Attempting to stop server via menu...
+2025-06-04 03:00:39.691 UTC [INFO] subpub_server::server - Shutdown signal received. Attempting to gracefully shut down server...
+2025-06-04 03:00:39.691 UTC [INFO] subpub_server::server - Server gracefully shut down.
+2025-06-04 03:00:39.691 UTC [INFO] subpub_server - Server stop initiated via menu.
+2025-06-04 03:00:44.475 UTC [INFO] subpub_server - Attempting to start server via menu...
+2025-06-04 03:00:44.475 UTC [INFO] subpub_server - Server start initiated via menu.
+2025-06-04 03:00:44.475 UTC [INFO] subpub_server::server - =================================================
+2025-06-04 03:00:44.475 UTC [INFO] subpub_server::server - 🚀 Starting SubPub UDP Server v0.1.0
+2025-06-04 03:00:44.475 UTC [INFO] subpub_server::server - =================================================
+2025-06-04 03:00:44.476 UTC [INFO] subpub_server::server - Attempting to bind main server to: 192.168.0.253:7878
+2025-06-04 03:00:44.476 UTC [INFO] subpub_server::server - ✅ Main server successfully bound and listening on: 192.168.0.253:7878
+2025-06-04 03:00:44.476 UTC [INFO] subpub_server::server - Awaiting incoming UDP messages...
+2025-06-04 03:00:44.476 UTC [INFO] subpub_server::server - -------------------------------------------------
+2025-06-04 03:00:44.476 UTC [INFO] subpub_server::server - Starting multicast discovery listener on 239.0.0.100:50100
+2025-06-04 03:00:44.476 UTC [INFO] subpub_server::server - Joined multicast group 239.0.0.100 on interface 0.0.0.0
+2025-06-04 03:00:53.408 UTC [INFO] subpub_server - Attempting to stop server via menu...
+2025-06-04 03:00:53.408 UTC [INFO] subpub_server::server - Shutdown signal received. Attempting to gracefully shut down server...
+2025-06-04 03:00:53.408 UTC [INFO] subpub_server::server - Server gracefully shut down.
+2025-06-04 03:00:53.408 UTC [INFO] subpub_server - Server stop initiated via menu.
+2025-06-04 03:00:57.158 UTC [INFO] subpub_server - Attempting to start server via menu...
+2025-06-04 03:00:57.158 UTC [INFO] subpub_server - Server start initiated via menu.
+2025-06-04 03:00:57.158 UTC [INFO] subpub_server::server - =================================================
+2025-06-04 03:00:57.158 UTC [INFO] subpub_server::server - 🚀 Starting SubPub UDP Server v0.1.0
+2025-06-04 03:00:57.158 UTC [INFO] subpub_server::server - =================================================
+2025-06-04 03:00:57.158 UTC [INFO] subpub_server::server - Attempting to bind main server to: 192.168.0.253:7878
+2025-06-04 03:00:57.158 UTC [INFO] subpub_server::server - ✅ Main server successfully bound and listening on: 192.168.0.253:7878
+2025-06-04 03:00:57.158 UTC [INFO] subpub_server::server - Awaiting incoming UDP messages...
+2025-06-04 03:00:57.158 UTC [INFO] subpub_server::server - -------------------------------------------------
+2025-06-04 03:00:57.158 UTC [INFO] subpub_server::server - Starting multicast discovery listener on 239.0.0.100:50100
+2025-06-04 03:00:57.159 UTC [INFO] subpub_server::server - Joined multicast group 239.0.0.100 on interface 0.0.0.0
+2025-06-04 03:13:50.545 UTC [INFO] subpub_server::midi_handler - Successfully loaded MIDI mappings from "midi_mapping.toml"
+2025-06-04 03:13:51.130 UTC [INFO] subpub_server::midi_handler - Created virtual MIDI output port: SubPubMIDI-Output
+2025-06-04 03:13:51.131 UTC [INFO] subpub_server::midi_handler - MIDI Handler initialized successfully.
+2025-06-04 03:13:51.131 UTC [INFO] subpub_server - MIDI Handler creation attempted.
+2025-06-04 03:13:51.131 UTC [INFO] subpub_server - Starting SubPub Tray Icon Application with tray-icon...
+2025-06-04 03:13:51.133 UTC [INFO] subpub_server - Inverting icon colors...
+2025-06-04 03:13:51.244 UTC [INFO] subpub_server - Tray icon created. Starting tao event loop.
+2025-06-04 03:13:57.704 UTC [INFO] subpub_server - Attempting to start server via menu...
+2025-06-04 03:13:57.705 UTC [INFO] subpub_server - Server start initiated via menu.
+2025-06-04 03:13:57.705 UTC [INFO] subpub_server::server - =================================================
+2025-06-04 03:13:57.705 UTC [INFO] subpub_server::server - 🚀 Starting SubPub UDP Server v0.1.0
+2025-06-04 03:13:57.705 UTC [INFO] subpub_server::server - =================================================
+2025-06-04 03:13:57.705 UTC [INFO] subpub_server::server - Attempting to bind main server to: 192.168.0.253:7878
+2025-06-04 03:13:57.705 UTC [INFO] subpub_server::server - ✅ Main server successfully bound and listening on: 192.168.0.253:7878
+2025-06-04 03:13:57.705 UTC [INFO] subpub_server::server - Awaiting incoming UDP messages...
+2025-06-04 03:13:57.705 UTC [INFO] subpub_server::server - -------------------------------------------------
+2025-06-04 03:13:57.705 UTC [INFO] subpub_server::server - Starting multicast discovery listener on 239.0.0.100:50100
+2025-06-04 03:13:57.705 UTC [INFO] subpub_server::server - Joined multicast group 239.0.0.100 on interface 0.0.0.0
+2025-06-04 03:17:26.569 UTC [INFO] subpub_server - Attempting to stop server via menu...
+2025-06-04 03:17:26.570 UTC [INFO] subpub_server::server - Shutdown signal received. Attempting to gracefully shut down server...
+2025-06-04 03:17:26.570 UTC [INFO] subpub_server::server - Server gracefully shut down.
+2025-06-04 03:17:26.570 UTC [INFO] subpub_server - Server stop initiated via menu.
+2025-06-04 03:17:27.952 UTC [INFO] subpub_server - Attempting to start server via menu...
+2025-06-04 03:17:27.952 UTC [INFO] subpub_server - Server start initiated via menu.
+2025-06-04 03:17:27.952 UTC [INFO] subpub_server::server - =================================================
+2025-06-04 03:17:27.952 UTC [INFO] subpub_server::server - 🚀 Starting SubPub UDP Server v0.1.0
+2025-06-04 03:17:27.952 UTC [INFO] subpub_server::server - =================================================
+2025-06-04 03:17:27.952 UTC [INFO] subpub_server::server - Attempting to bind main server to: 192.168.0.253:7878
+2025-06-04 03:17:27.952 UTC [INFO] subpub_server::server - ✅ Main server successfully bound and listening on: 192.168.0.253:7878
+2025-06-04 03:17:27.952 UTC [INFO] subpub_server::server - Awaiting incoming UDP messages...
+2025-06-04 03:17:27.952 UTC [INFO] subpub_server::server - -------------------------------------------------
+2025-06-04 03:17:27.952 UTC [INFO] subpub_server::server - Starting multicast discovery listener on 239.0.0.100:50100
+2025-06-04 03:17:27.952 UTC [INFO] subpub_server::server - Joined multicast group 239.0.0.100 on interface 0.0.0.0
+2025-06-04 03:17:36.169 UTC [INFO] subpub_server - Reload MIDI Mappings menu item selected.
+2025-06-04 03:17:36.169 UTC [INFO] subpub_server::midi_handler - Attempting to reload MIDI mappings...
+2025-06-04 03:17:36.170 UTC [INFO] subpub_server::midi_handler - Successfully loaded MIDI mappings from "midi_mapping.toml"
+2025-06-04 03:17:36.170 UTC [INFO] subpub_server::midi_handler - MIDI mappings reloaded successfully.
+2025-06-04 03:17:36.170 UTC [INFO] subpub_server - MIDI mappings reloaded successfully via menu.
+2025-07-02 02:30:09.742 UTC [INFO] subpub_server::midi_handler - Successfully loaded MIDI mappings from "midi_mapping.toml"
+2025-07-02 02:30:10.345 UTC [INFO] subpub_server::midi_handler - Created virtual MIDI output port: SubPubMIDI-Output
+2025-07-02 02:30:10.345 UTC [INFO] subpub_server::midi_handler - MIDI Handler initialized successfully.
+2025-07-02 02:30:10.345 UTC [INFO] subpub_server - MIDI Handler creation attempted.
+2025-07-02 02:30:10.345 UTC [INFO] subpub_server - Starting SubPub Tray Icon Application with tray-icon...
+2025-07-02 02:30:10.347 UTC [INFO] subpub_server - Inverting icon colors...
+2025-07-02 02:30:10.467 UTC [INFO] subpub_server - Tray icon created. Starting tao event loop.
+2025-07-02 02:53:03.502 UTC [INFO] subpub_server::midi_handler - Successfully loaded MIDI mappings from "midi_mapping.toml"
+2025-07-02 02:53:03.514 UTC [INFO] subpub_server::midi_handler - Created virtual MIDI output port: SubPubMIDI-Output
+2025-07-02 02:53:03.514 UTC [INFO] subpub_server::midi_handler - MIDI Handler initialized successfully.
+2025-07-02 02:53:03.514 UTC [INFO] subpub_server - MIDI Handler creation attempted.
+2025-07-02 02:53:03.514 UTC [INFO] subpub_server - Starting SubPub Tray Icon Application with tray-icon...
+2025-07-02 02:53:03.515 UTC [INFO] subpub_server - Inverting icon colors...
+2025-07-02 02:53:03.599 UTC [INFO] subpub_server - Tray icon created. Starting tao event loop.
+2025-07-02 03:05:43.610 UTC [INFO] subpub_server::midi_handler - Successfully loaded MIDI mappings from "midi_mapping.toml"
+2025-07-02 03:05:43.621 UTC [INFO] subpub_server::midi_handler - Created virtual MIDI output port: Zerver
+2025-07-02 03:05:43.621 UTC [INFO] subpub_server::midi_handler - MIDI Handler initialized successfully.
+2025-07-02 03:05:43.621 UTC [INFO] subpub_server - MIDI Handler creation attempted.
+2025-07-02 03:05:43.621 UTC [INFO] subpub_server - Starting SubPub Tray Icon Application with tray-icon...
+2025-07-02 03:05:43.622 UTC [INFO] subpub_server - Inverting icon colors...
+2025-07-02 03:05:43.698 UTC [INFO] subpub_server - Tray icon created. Starting tao event loop.
+2025-07-02 03:13:40.500 UTC [INFO] subpub_server::midi_handler - Successfully loaded MIDI mappings from "midi_mapping.toml"
+2025-07-02 03:13:40.515 UTC [INFO] subpub_server::midi_handler - Created virtual MIDI output port: Zerver
+2025-07-02 03:13:40.515 UTC [INFO] subpub_server::midi_handler - MIDI Handler initialized successfully.
+2025-07-02 03:13:40.515 UTC [INFO] subpub_server - MIDI Handler creation attempted.
+2025-07-02 03:13:40.515 UTC [INFO] subpub_server - Starting SubPub Tray Icon Application with tray-icon...
+2025-07-02 03:13:40.515 UTC [INFO] subpub_server - Inverting icon colors...
+2025-07-02 03:13:40.599 UTC [INFO] subpub_server - Tray icon created. Starting tao event loop.
+2025-07-02 03:21:18.508 UTC [INFO] subpub_server::midi_handler - Successfully loaded MIDI mappings from "midi_mapping.toml"
+2025-07-02 03:21:18.521 UTC [INFO] subpub_server::midi_handler - Created virtual MIDI output port: Zerver
+2025-07-02 03:21:18.521 UTC [INFO] subpub_server::midi_handler - MIDI Handler initialized successfully.
+2025-07-02 03:21:18.521 UTC [INFO] subpub_server - MIDI Handler creation attempted.
+2025-07-02 03:21:18.521 UTC [INFO] subpub_server - Starting SubPub Tray Icon Application with tray-icon...
+2025-07-02 03:21:18.521 UTC [INFO] subpub_server - Inverting icon colors...
+2025-07-02 03:21:18.603 UTC [INFO] subpub_server - Tray icon created. Starting tao event loop.
+2025-07-02 03:32:57.971 UTC [INFO] subpub_server::midi_handler - Successfully loaded MIDI mappings from "midi_mapping.toml"
+2025-07-02 03:32:57.984 UTC [INFO] subpub_server::midi_handler - Created virtual MIDI output port: Zerver
+2025-07-02 03:32:57.984 UTC [INFO] subpub_server::midi_handler - MIDI Handler initialized successfully.
+2025-07-02 03:32:57.984 UTC [INFO] subpub_server - MIDI Handler creation attempted.
+2025-07-02 03:32:57.984 UTC [INFO] subpub_server - Starting SubPub Tray Icon Application with tray-icon...
+2025-07-02 03:32:57.984 UTC [INFO] subpub_server - Inverting icon colors...
+2025-07-02 03:32:58.068 UTC [INFO] subpub_server - Tray icon created. Starting tao event loop.
+2025-07-02 03:38:30.389 UTC [INFO] subpub_server::midi_handler - Successfully loaded MIDI mappings from "midi_mapping.toml"
+2025-07-02 03:38:30.403 UTC [INFO] subpub_server::midi_handler - Created virtual MIDI output port: Zerver
+2025-07-02 03:38:30.403 UTC [INFO] subpub_server::midi_handler - MIDI Handler initialized successfully.
+2025-07-02 03:38:30.403 UTC [INFO] subpub_server - MIDI Handler creation attempted.
+2025-07-02 03:38:30.403 UTC [INFO] subpub_server - Starting SubPub Tray Icon Application with tray-icon...
+2025-07-02 03:38:30.404 UTC [INFO] subpub_server - Inverting icon colors...
+2025-07-02 03:38:30.488 UTC [INFO] subpub_server - Tray icon created. Starting tao event loop.
+2025-07-02 03:57:57.262 UTC [INFO] subpub_server::midi_handler - Successfully loaded MIDI mappings from "midi_mapping.toml"
+2025-07-02 03:57:57.275 UTC [INFO] subpub_server::midi_handler - Created virtual MIDI output port: Zerver
+2025-07-02 03:57:57.275 UTC [INFO] subpub_server::midi_handler - MIDI Handler initialized successfully.
+2025-07-02 03:57:57.275 UTC [INFO] subpub_server - MIDI Handler creation attempted.
+2025-07-02 03:57:57.275 UTC [INFO] subpub_server - Starting SubPub Tray Icon Application with tray-icon...
+2025-07-02 03:57:57.275 UTC [INFO] subpub_server - Inverting icon colors...
+2025-07-02 03:57:57.356 UTC [INFO] subpub_server - Tray icon created. Starting tao event loop.
+2025-07-02 04:04:17.779 UTC [WARN] subpub_server - Server is not running (menu).
+2025-07-02 04:04:18.827 UTC [INFO] subpub_server - Attempting to start server via menu...
+2025-07-02 04:04:18.827 UTC [INFO] subpub_server - Server start initiated via menu.
+2025-07-02 04:04:18.827 UTC [INFO] subpub_server::server - =================================================
+2025-07-02 04:04:18.827 UTC [INFO] subpub_server::server - 🚀 Starting SubPub UDP Server v0.1.0
+2025-07-02 04:04:18.827 UTC [INFO] subpub_server::server - =================================================
+2025-07-02 04:04:18.827 UTC [INFO] subpub_server::server - Attempting to bind main server to: 192.168.0.253:7878
+2025-07-02 04:04:18.828 UTC [INFO] subpub_server::server - ✅ Main server successfully bound and listening on: 192.168.0.253:7878
+2025-07-02 04:04:18.828 UTC [INFO] subpub_server::server - Awaiting incoming UDP messages...
+2025-07-02 04:04:18.828 UTC [INFO] subpub_server::server - -------------------------------------------------
+2025-07-02 04:04:18.828 UTC [INFO] subpub_server::server - Starting multicast discovery listener on 239.0.0.100:50100
+2025-07-02 04:04:18.828 UTC [INFO] subpub_server::server - Joined multicast group 239.0.0.100 on interface 0.0.0.0
+2025-07-02 04:04:19.976 UTC [INFO] subpub_server - Reload MIDI Mappings menu item selected.
+2025-07-02 04:04:19.976 UTC [INFO] subpub_server::midi_handler - Attempting to reload MIDI mappings...
+2025-07-02 04:04:19.977 UTC [INFO] subpub_server::midi_handler - Successfully loaded MIDI mappings from "midi_mapping.toml"
+2025-07-02 04:04:19.977 UTC [INFO] subpub_server::midi_handler - MIDI mappings reloaded successfully.
+2025-07-02 04:04:19.977 UTC [INFO] subpub_server - MIDI mappings reloaded successfully via menu.
+2025-07-02 04:05:15.900 UTC [INFO] subpub_server::server - Received discovery ping from 192.168.0.108:50100
+2025-07-02 04:05:15.900 UTC [INFO] subpub_server::server - Sent discovery response to 192.168.0.108:50100: SUBPUB_SERVER_AT: 192.168.0.253:7878
+2025-07-02 04:50:28.796 UTC [INFO] subpub_server::server - Received discovery ping from 192.168.0.108:50100
+2025-07-02 04:50:28.797 UTC [INFO] subpub_server::server - Sent discovery response to 192.168.0.108:50100: SUBPUB_SERVER_AT: 192.168.0.253:7878
+2025-07-02 04:52:03.418 UTC [INFO] subpub_server::server - Received discovery ping from 192.168.0.108:50100
+2025-07-02 04:52:03.419 UTC [INFO] subpub_server::server - Sent discovery response to 192.168.0.108:50100: SUBPUB_SERVER_AT: 192.168.0.253:7878
+2025-07-02 04:54:17.405 UTC [INFO] subpub_server::midi_handler - Successfully loaded MIDI mappings from "midi_mapping.toml"
+2025-07-02 04:54:17.420 UTC [INFO] subpub_server::midi_handler - Created virtual MIDI output port: Zerver
+2025-07-02 04:54:17.420 UTC [INFO] subpub_server::midi_handler - MIDI Handler initialized successfully.
+2025-07-02 04:54:17.420 UTC [INFO] subpub_server - MIDI Handler creation attempted.
+2025-07-02 04:54:17.420 UTC [INFO] subpub_server - Starting SubPub Tray Icon Application with tray-icon...
+2025-07-02 04:54:17.420 UTC [INFO] subpub_server - Inverting icon colors...
+2025-07-02 04:54:17.513 UTC [INFO] subpub_server - Tray icon created. Starting tao event loop.
+2025-07-02 05:15:54.100 UTC [INFO] subpub_server::midi_handler - Successfully loaded MIDI mappings from "midi_mapping.toml"
+2025-07-02 05:15:54.113 UTC [INFO] subpub_server::midi_handler - Created virtual MIDI output port: Zerver
+2025-07-02 05:15:54.113 UTC [INFO] subpub_server::midi_handler - MIDI Handler initialized successfully.
+2025-07-02 05:15:54.113 UTC [INFO] subpub_server - MIDI Handler creation attempted.
+2025-07-02 05:15:54.113 UTC [INFO] subpub_server - Starting SubPub Tray Icon Application with tray-icon...
+2025-07-02 05:15:54.114 UTC [INFO] subpub_server - Inverting icon colors...
+2025-07-02 05:15:54.205 UTC [INFO] subpub_server - Tray icon created. Starting tao event loop.

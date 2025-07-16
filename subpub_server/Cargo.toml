@@ -9,3 +9,13 @@ log = "0.4"
 env_logger = "0.10"
 dashmap = "5.5"
 local-ip-address = "0.5"
+tray-icon = "0.20.1"
+anyhow = "1.0"
+crossbeam-channel = "^0.5"
+log4rs = "1.2.0" # For file logging
+image = { version = "0.24", default-features = false, features = ["ico"] } # For loading icon data
+tao = "0.25.0"
+midir = "0.9.1" # For MIDI functionality
+serde = { version = "1.0", features = ["derive"] } # For deserializing mapping file
+toml = "0.8" # For TOML parsing
+serde_json = "1.0" # For JSON parsing of MIDI overrides

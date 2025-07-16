@@ -1,0 +1,61 @@
+# Zerver MIDI Mapping File
+#
+# This file defines how incoming pub/sub messages are translated into MIDI actions.
+# The system uses a "Base + Override" model.
+#
+# 1. The server finds a `sub_topic` that matches the incoming message.
+# 2. It loads the `actions` defined here as the "base" behavior.
+# 3. It then tries to parse the message payload as a JSON object.
+# 4. Any keys in the JSON object (e.g., "note", "vel", "ch") will OVERRIDE
+#    the values from the base action.
+# 5. If the payload is not valid JSON, the base action is used as-is.
+
+# --- Example 1: Simple, Fixed Trigger ---
+# A controller can send a simple "ping" to this topic. The payload doesn't matter.
+# > PUB:drums/kick:1
+[[mapping]]
+sub_topic = "drums/kick"
+actions = [
+    { action_type = "note_on_off", channel = 9, note = 36, velocity = 127, duration_ms = 50 }
+]
+
+# --- Example 2: Dynamic Value ---
+# A controller sends a payload with a "value" to control a synth parameter.
+# The mapping defines the channel and CC number, but the value is dynamic.
+# > PUB:synth/filter:{"value": 105}
+[[mapping]]
+sub_topic = "synth/filter"
+actions = [
+    { action_type = "cc", channel = 0, control_num = 74 }
+]
+
+# --- Example 3: Dynamic Note with Fixed Velocity ---
+# A controller can decide the note, but the velocity is fixed in the mapping.
+# This is useful for instruments that aren't velocity-sensitive.
+# > PUB:sequencer/step:{"note": 64}
+[[mapping]]
+sub_topic = "sequencer/step"
+actions = [
+    { action_type = "note_on_off", channel = 2, velocity = 100, duration_ms = 150 }
+]
+
+# --- Example 4: Full Dynamic Control ---
+# The mapping only defines the most basic action type. The controller provides all details.
+# This is useful for a generic keyboard or grid controller.
+# > PUB:controller/generic:{"note": 72, "vel": 90, "ch": 3}
+[[mapping]]
+sub_topic = "controller/generic"
+actions = [
+    { action_type = "note_on_off", channel = 0, duration_ms = 200 }
+]
+
+# --- Example 5: Remapping / God Mode ---
+# The controller thinks it's sending a C4 note on channel 1.
+# > PUB:controller/remapped:{"note": 60, "ch": 0}
+# But we can remap it to be a G5 note on channel 10 with a different action type!
+# The controller's "ch" and "note" are overridden by the mapping file.
+[[mapping]]
+sub_topic = "controller/remapped"
+actions = [
+    { action_type = "note_on", channel = 9, note = 79, velocity = 110 }
+]

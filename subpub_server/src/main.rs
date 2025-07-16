@@ -1,459 +1,289 @@
-use std::collections::HashSet; // HashMap is no longer needed here directly for Subscribers
-use std::net::SocketAddr;
 use std::sync::Arc;
-use tokio::net::UdpSocket;
-// Mutex is no longer needed from tokio::sync for Subscribers
-use log::{info, warn, error};
-use dashmap::DashMap; // Import DashMap
-use std::net::{IpAddr, Ipv4Addr}; // Added Ipv4Addr for multicast
+use log::{info, warn, error, LevelFilter};
+use anyhow::{Result, Context};
+use crossbeam_channel::unbounded;
+use tokio::runtime::Runtime;
+use std::sync::atomic::{AtomicBool, Ordering};
 
-// TODO: Make IP address and port configurable via command-line arguments or a config file.
-/// The default IP address and port the UDP server will bind to.
-pub const BIND_ADDRESS: &str = "127.0.0.1:7878";
-/// Multicast address for discovery
-pub const MULTICAST_ADDRESS: &str = "239.0.0.100:50100"; // New, less common multicast address
-/// Message to expect for discovery
-pub const DISCOVERY_MESSAGE: &str = "DISCOVER_SUBPUB_SERVER";
-/// Response message for discovery
-pub const DISCOVERY_RESPONSE_PREFIX: &str = "SUBPUB_SERVER_AT:";
+// tray-icon specific imports
+use tray_icon::{
+    menu::{Menu, MenuItem, MenuEvent, PredefinedMenuItem}, // Changed CustomMenuItem to MenuItem
+    TrayIconBuilder, TrayIconEvent,
+    Icon, // Changed icon::Icon to Icon
+};
+use image::GenericImageView; // For loading icon data
 
+// Tao for event loop
+use tao::{
+    event_loop::{ControlFlow, EventLoopBuilder},
+    platform::macos::EventLoopExtMacOS, // For set_activation_policy
+};
 
-/// A type alias for the shared, thread-safe data structure holding channel subscriptions.
-///
-/// It uses `DashMap` for concurrent access to channel subscriptions.
-/// - The `DashMap` maps channel names (`String`) to a `HashSet` of `SocketAddr`.
-/// - The `HashSet` stores the unique addresses of clients subscribed to that channel.
-/// `DashMap` provides fine-grained locking, improving performance under contention.
-pub type Subscribers = Arc<DashMap<String, HashSet<SocketAddr>>>;
+// Logging specific imports
+use log4rs::append::console::ConsoleAppender;
+use log4rs::append::file::FileAppender;
+use log4rs::config::{Appender, Config, Root};
+use log4rs::encode::pattern::PatternEncoder;
 
-/// Runs the core server logic loop.
-///
-/// This function listens for incoming UDP datagrams on the provided `socket`.
-/// It parses messages according to the pub/sub protocol:
-/// - `SUB:channel_name`
-/// - `UNSUB:channel_name`
-/// - `PUB:channel_name:payload`
-///
-/// It updates the `subscribers` map based on SUB/UNSUB commands and forwards
-/// messages for PUB commands to all subscribed clients on the respective channel.
-///
-/// # Arguments
-/// * `socket`: An `Arc<UdpSocket>` that the server will use to receive and send messages.
-/// * `subscribers`: The shared `Subscribers` map to store channel subscriptions.
-///
-/// # Errors
-/// Returns an error if receiving from or sending on the socket fails, or if other
-/// critical operational errors occur. The loop itself is designed to run indefinitely
-/// unless a critical error forces it to exit.
-async fn run_server_processing_loop(
-    socket: Arc<UdpSocket>,
-    subscribers: Subscribers,
-) -> Result<(), Box<dyn std::error::Error + Send + Sync + 'static>> {
-    let mut buf = [0; 1024]; // Buffer for incoming data
+// MIDI Handler
+use crate::midi_handler::MidiHandler;
 
-    loop {
-        let (len, addr) = socket.recv_from(&mut buf).await?;
-        let message_str = match std::str::from_utf8(&buf[..len]) {
-            Ok(s) => s.trim(),
-            Err(e) => {
-                error!("Received non-UTF8 data from {}: {}", addr, e);
-                continue;
-            }
-        };
+// Declare the server module
+mod server;
+// Declare the MIDI handler module
+mod midi_handler;
 
-        info!("Received from {}: {}", addr, message_str);
+fn init_logging() -> Result<()> {
+    // Pattern for log messages
+    let log_pattern = "{d(%Y-%m-%d %H:%M:%S%.3f %Z)(utc)} [{l}] {M} - {m}{n}";
+    // Log file path
+    let log_file_path = "subpub_server.log";
 
-        let parts: Vec<&str> = message_str.splitn(3, ':').collect();
+    // Console appender
+    let stdout = ConsoleAppender::builder()
+        .encoder(Box::new(PatternEncoder::new(log_pattern)))
+        .build();
 
-        if parts.len() < 2 {
-            warn!("Invalid message format from {}: {}", addr, message_str);
-            // Optionally send an error back to the client
-            // socket.send_to(b"ERROR:InvalidFormat", addr).await?;
-            continue;
-        }
+    // File appender
+    // TODO: Add log rotation in the future if needed
+    let file_appender = FileAppender::builder()
+        .encoder(Box::new(PatternEncoder::new(log_pattern)))
+        .build(log_file_path)
+        .context(format!("Failed to create file appender at {}", log_file_path))?;
 
-        let action = parts[0].to_uppercase();
-        let channel_name = parts[1].to_string();
-        let payload = if parts.len() == 3 { Some(parts[2]) } else { None };
+    // Log4rs config
+    let config = Config::builder()
+        .appender(Appender::builder().build("stdout", Box::new(stdout)))
+        .appender(Appender::builder().build("file", Box::new(file_appender)))
+        .build(
+            Root::builder()
+                .appender("stdout")
+                .appender("file")
+                .build(LevelFilter::Debug), // Set global log level to Debug for more verbose output
+        )
+        .context("Failed to build log4rs config")?;
 
-        // No global lock needed for DashMap for individual operations.
-        // Operations on DashMap are typically more fine-grained.
+    // Initialize log4rs
+    log4rs::init_config(config).context("Failed to initialize log4rs")?;
 
-        match action.as_str() {
-            "SUB" => {
-                info!("Client {} subscribed to channel '{}'", addr, channel_name);
-                // Get a mutable reference to the HashSet for the channel, creating it if it doesn't exist.
-                subscribers.entry(channel_name.clone()).or_default().value_mut().insert(addr);
-                // `entry().or_default()` returns a RefMut guard, which is dropped at the end of the statement.
-            }
-            "UNSUB" => {
-                info!("Client {} unsubscribed from channel '{}'", addr, channel_name);
-                let mut channel_was_emptied = false;
-                if let Some(mut channel_set_ref) = subscribers.get_mut(&channel_name) {
-                    // channel_set_ref is a RefMut<String, HashSet<SocketAddr>>
-                    let removed = channel_set_ref.value_mut().remove(&addr);
-                    if removed && channel_set_ref.value().is_empty() {
-                        channel_was_emptied = true;
-                    }
-                }
-                // If the channel became empty after removing the subscriber, remove the channel itself.
-                // This is a separate operation to avoid holding a RefMut while trying to remove its key.
-                if channel_was_emptied {
-                    subscribers.remove(&channel_name);
-                    info!("Channel '{}' is now empty and removed.", channel_name);
-                }
-            }
-            "PUB" => {
-                if let Some(p) = payload {
-                    info!("Client {} published to channel '{}': {}", addr, channel_name, p);
-                    let mut subs_to_notify: Vec<SocketAddr> = Vec::new();
-                    
-                    // Get a read reference to the HashSet for the channel.
-                    if let Some(channel_set_ref) = subscribers.get(&channel_name) {
-                        // channel_set_ref is a Ref<String, HashSet<SocketAddr>>
-                        subs_to_notify = channel_set_ref.value().iter().cloned().collect();
-                        // The Ref guard is dropped when channel_set_ref goes out of scope.
-                    }
-
-                    if !subs_to_notify.is_empty() {
-                        for subscriber_addr in subs_to_notify {
-                            info!("Forwarding message to subscriber {} on channel '{}'", subscriber_addr, channel_name);
-                            if let Err(e) = socket.send_to(p.as_bytes(), subscriber_addr).await {
-                                error!("Failed to send message to {}: {}", subscriber_addr, e);
-                                // TODO: Consider removing unresponsive subscribers after several failures
-                            }
-                        }
-                    } else {
-                        info!("No subscribers for channel '{}'. Message not forwarded.", channel_name);
-                    }
-                } else {
-                    warn!("PUB action from {} to channel '{}' without payload.", addr, channel_name);
-                }
-            }
-            // Handle unknown actions
-            _ => {
-                warn!("Unknown action '{}' from {}: {}", action, addr, message_str);
-            }
-        }
-    }
-    // This loop is infinite, so Ok(()) is effectively unreachable.
-}
-
-/// Spawns a task to listen for multicast discovery messages.
-async fn run_multicast_discovery_listener(
-    main_server_bind_address: String,
-) -> Result<(), Box<dyn std::error::Error + Send + Sync + 'static>> {
-    info!("Starting multicast discovery listener on {}", MULTICAST_ADDRESS);
-
-    let listen_addr_str = MULTICAST_ADDRESS.split(':').collect::<Vec<&str>>()[1];
-    let listen_port: u16 = listen_addr_str.parse()?;
-    let listen_ip = "0.0.0.0"; // Listen on all interfaces for multicast
-
-    let socket = UdpSocket::bind(format!("{}:{}", listen_ip, listen_port)).await?;
-    
-    let multicast_group_addr: Ipv4Addr = MULTICAST_ADDRESS.split(':').collect::<Vec<&str>>()[0].parse()?;
-    // This depends on the OS and network configuration. For simplicity, we assume it works.
-    // For robust multicast, more socket options might be needed (e.g., IP_MULTICAST_LOOP, IP_MULTICAST_TTL)
-    // and potentially using `socket2` crate for more control.
-    // Tokios UdpSocket join_multicast_v4 takes an IpAddr, which should be the multicast group,
-    // and an interface IP to join on. Using 0.0.0.0 for the interface IP.
-    let interface_to_join_on = Ipv4Addr::new(0,0,0,0); // "any" interface
-    socket.join_multicast_v4(multicast_group_addr, interface_to_join_on)?;
-    info!("Joined multicast group {} on interface {}", multicast_group_addr, interface_to_join_on);
-
-
-    let mut buf = [0; 1024];
-    loop {
-        let (len, src_addr) = socket.recv_from(&mut buf).await?;
-        let message = std::str::from_utf8(&buf[..len])?.trim();
-
-        if message == DISCOVERY_MESSAGE {
-            info!("Received discovery ping from {}", src_addr);
-            let response = format!("{} {}", DISCOVERY_RESPONSE_PREFIX, main_server_bind_address);
-            socket.send_to(response.as_bytes(), src_addr).await?;
-            info!("Sent discovery response to {}: {}", src_addr, response);
-        } else {
-            // Optional: log non-discovery messages if needed for debugging
-            warn!("Received unknown multicast message from {}: {}", src_addr, message);
-        }
-    }
-    // Unreachable in normal operation
-}
-
-/// The main entry point for the SubPub UDP server application.
-///
-/// This function performs the following steps:
-/// 1. Initializes the logging framework (`env_logger`). It defaults to `info` level
-///    for this crate and `warn` for others if `RUST_LOG` is not set.
-/// 2. Prints a startup banner and attempts to bind a UDP socket to `BIND_ADDRESS`.
-/// 3. If binding is successful, it logs the actual listening address.
-/// 4. Initializes the shared `Subscribers` map.
-/// 5. Calls `run_server_processing_loop` to start handling client messages.
-///
-/// # Errors
-/// Returns an error if the logger fails to initialize, the socket fails to bind,
-/// or if the `run_server_processing_loop` exits with an error.
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync + 'static>> {
-    // Initialize the logger
-    let mut log_builder = env_logger::Builder::from_default_env();
-    log_builder.format_timestamp_millis();
-
-    // If RUST_LOG is not set, default to info for this crate and warn for others.
-    if std::env::var("RUST_LOG").is_err() {
-        log_builder.filter_module(module_path!(), log::LevelFilter::Info) // Set current crate to info
-                   .filter_level(log::LevelFilter::Info); // Set default for all others to info
-    }
-    log_builder.init();
-
-    // Startup banner
-    info!("=================================================");
-    info!("🚀 Starting SubPub UDP Server v0.1.0");
-    info!("=================================================");
-
-    let local_ip = local_ip_address::local_ip().unwrap_or_else(|e| {
-        warn!("Could not get local IP address: {}. Defaulting to 127.0.0.1", e);
-        IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1))
-    });
-    
-    let port_str = BIND_ADDRESS.split(':').last().unwrap_or("7878");
-    let actual_bind_address = format!("{}:{}", local_ip, port_str);
-
-    info!("Attempting to bind main server to: {}", actual_bind_address);
-
-    let socket = Arc::new(UdpSocket::bind(&actual_bind_address).await?);
-    let actual_addr = socket.local_addr()?;
-    info!("✅ Main server successfully bound and listening on: {}", actual_addr);
-    info!("Awaiting incoming UDP messages...");
-    info!("-------------------------------------------------");
-
-    // Spawn multicast discovery listener
-    let discovery_main_server_addr = actual_addr.to_string();
-    tokio::spawn(async move {
-        if let Err(e) = run_multicast_discovery_listener(discovery_main_server_addr).await {
-            error!("Multicast discovery listener failed: {}", e);
-        }
-    });
-
-    let subscribers: Subscribers = Arc::new(DashMap::new()); // Use DashMap
-
-    // Start the main processing loop
-    if let Err(e) = run_server_processing_loop(socket, subscribers).await {
-        error!("Server loop exited with error: {}", e);
-        return Err(e);
-    }
-    // Normally, run_server_processing_loop runs indefinitely.
-    // If it exits, it's likely an unrecoverable error or a planned shutdown (not yet implemented).
     Ok(())
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use std::net::{IpAddr, Ipv4Addr};
-    use std::collections::HashMap; // Keep for process_message_logic test helper
-    use tokio::time::{sleep, Duration};
 
-    fn create_mock_addr(port: u16) -> SocketAddr {
-        SocketAddr::new(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1)), port)
+fn main() -> Result<()> {
+    // Initialize logging
+    init_logging().context("Failed to initialize application logging")?;
+
+    // Initialize MIDI Handler
+    let midi_handler_arc = MidiHandler::new().context("Failed to initialize MIDI handler")?;
+    info!("MIDI Handler creation attempted."); // MidiHandler::new() already logs its own success/failure
+
+    info!("Starting SubPub Tray Icon Application with tray-icon...");
+
+    // Icon
+    let icon_path = "src/subpub.ico";
+    let img = image::open(icon_path)
+        .with_context(|| format!("Failed to load image from path: {}", icon_path))?;
+    let (width, height) = img.dimensions();
+    let mut rgba = img.to_rgba8().into_raw(); // Make rgba mutable
+
+    // Invert RGB colors, keep Alpha
+    // This will make dark colors light and light colors dark.
+    // For a typical black icon on transparent, it should become white on transparent.
+    info!("Inverting icon colors..."); // Log this one-time action
+    for chunk in rgba.chunks_mut(4) { // Process 4 bytes at a time: R, G, B, A
+        if chunk.len() == 4 {
+            chunk[0] = 255 - chunk[0]; // Invert R
+            chunk[1] = 255 - chunk[1]; // Invert G
+            chunk[2] = 255 - chunk[2]; // Invert B
+            // chunk[3] is Alpha, leave as is
+        }
     }
+    
+    let icon = Icon::from_rgba(rgba, width, height)
+        .with_context(|| format!("Failed to create icon from RGBA data from path: {}", icon_path))?;
 
-    // Helper to process a message and update subscribers map for testing core logic
-    // This simplifies testing the HashMap manipulation without full async/network setup.
-    // This helper remains unchanged as it tests logic against a standard HashMap,
-    // which is fine for its specific unit testing purpose.
-    fn process_message_logic(
-        addr: SocketAddr,
-        message_str: &str,
-        subs: &mut HashMap<String, HashSet<SocketAddr>>,
-        // We'll need a way to capture "sent" messages for PUB tests later,
-        // or make this helper focus only on state changes. For now, state.
-    ) {
-        let parts: Vec<&str> = message_str.splitn(3, ':').collect();
-        if parts.len() < 2 {
+    // Menu items
+    const MENU_ITEM_START_ID: &str = "start_server";
+    const MENU_ITEM_STOP_ID: &str = "stop_server";
+    const MENU_ITEM_RELOAD_MIDI_ID: &str = "reload_midi_mappings"; // New ID
+    const MENU_ITEM_QUIT_ID: &str = "quit_app";
+
+    let tray_menu = Menu::new();
+    // Corrected MenuItem::with_id arguments: id, text, enabled, accelerator
+    let start_item = MenuItem::with_id(MENU_ITEM_START_ID, "Start Server", true, None);
+    let stop_item = MenuItem::with_id(MENU_ITEM_STOP_ID, "Stop Server", true, None);
+    let reload_midi_item = MenuItem::with_id(MENU_ITEM_RELOAD_MIDI_ID, "Reload MIDI Mappings", true, None); // New item
+    let quit_item = MenuItem::with_id(MENU_ITEM_QUIT_ID, "Quit", true, None);
+    
+    tray_menu.append(&start_item).context("Failed to add 'Start Server' menu item")?;
+    tray_menu.append(&stop_item).context("Failed to add 'Stop Server' menu item")?;
+    tray_menu.append(&reload_midi_item).context("Failed to add 'Reload MIDI Mappings' menu item")?; // Add new item
+    tray_menu.append(&PredefinedMenuItem::separator()).context("Failed to add separator")?;
+    tray_menu.append(&quit_item).context("Failed to add 'Quit' menu item")?;
+
+    // Channels for communication with server task
+    let (server_shutdown_tx, server_shutdown_rx) = unbounded::<()>();
+    // server_status_tx might be useful for updating menu item states (e.g., enable/disable Start/Stop)
+    // For now, let's keep it simple.
+    let (server_status_tx, _server_status_rx) = unbounded::<bool>(); 
+
+
+    // Arc to hold the Tokio runtime handle and the server task handle
+    let rt_handle_arc: Arc<std::sync::Mutex<Option<Runtime>>> = Arc::new(std::sync::Mutex::new(None));
+    let server_task_handle_arc: Arc<std::sync::Mutex<Option<tokio::task::JoinHandle<Result<()>>>>> = Arc::new(std::sync::Mutex::new(None));
+    
+    let quit_flag = Arc::new(AtomicBool::new(false));
+    
+    // Create tao event loop & set activation policy for macOS
+    let mut event_loop = EventLoopBuilder::<()>::with_user_event().build(); // Use with_user_event for custom events if needed later
+    event_loop.set_activation_policy(tao::platform::macos::ActivationPolicy::Accessory);
+    
+    // The _tray_icon variable needs to be kept alive.
+    // It's created here and its lifetime is tied to the main function's scope,
+    // which is fine as event_loop.run will block.
+    let _tray_icon_instance = TrayIconBuilder::new()
+        .with_menu(Box::new(tray_menu)) // tray_menu was defined earlier
+        .with_tooltip("SubPub Server")
+        .with_icon(icon.clone()) // icon was defined earlier, clone if Icon is not Copy
+        .build()
+        .context("Failed to build tray icon")?;
+    
+    info!("Tray icon created. Starting tao event loop.");
+
+    // Clone Arcs and other variables needed for the event loop closure
+    let rt_handle_arc_clone = rt_handle_arc.clone();
+    let server_task_handle_arc_clone = server_task_handle_arc.clone();
+    let server_shutdown_tx_clone = server_shutdown_tx.clone(); // For stop and quit
+    let server_status_tx_clone_for_start = server_status_tx.clone(); // Specifically for start
+    let server_shutdown_rx_clone_for_start = server_shutdown_rx.clone(); // Specifically for start
+    let quit_flag_clone_for_event_loop = quit_flag.clone();
+    let midi_handler_clone_for_event_loop = midi_handler_arc.clone(); // Clone for event loop
+
+    event_loop.run(move |_event, _, control_flow| {
+        *control_flow = ControlFlow::Poll; 
+
+        if quit_flag_clone_for_event_loop.load(Ordering::SeqCst) {
+            info!("Quit flag set, exiting event loop via ControlFlow::Exit.");
+            
+            // Attempt to gracefully stop the server if it's running
+            let mut rt_guard = rt_handle_arc_clone.lock().unwrap();
+            let mut task_guard = server_task_handle_arc_clone.lock().unwrap();
+            if let Some(rt) = rt_guard.take() {
+                info!("Stopping server before exiting event loop...");
+                if let Some(task_handle) = task_guard.take() {
+                    server_shutdown_tx_clone.send(()).unwrap_or_else(|e| error!("Failed to send server shutdown signal on exit: {}",e));
+                    rt.block_on(async {
+                        if let Err(e) = task_handle.await {
+                            error!("Server task failed to join during exit: {:?}", e);
+                        }
+                    });
+                }
+                rt.shutdown_background();
+                info!("Server stopped during exit process.");
+            }
+
+            *control_flow = ControlFlow::Exit;
             return;
         }
 
-        let action = parts[0].to_uppercase();
-        let channel_name = parts[1].to_string();
-        let _payload = if parts.len() == 3 { Some(parts[2]) } else { None };
+        // Process menu events
+        if let Ok(menu_event) = MenuEvent::receiver().try_recv() {
+            // Removed verbose: info!("Menu event: {:?}", menu_event);
+            match menu_event.id.0.as_str() {
+                MENU_ITEM_START_ID => {
+                    let mut rt_guard = rt_handle_arc_clone.lock().unwrap();
+                    let mut task_guard = server_task_handle_arc_clone.lock().unwrap();
 
-        match action.as_str() {
-            "SUB" => {
-                subs.entry(channel_name.clone()).or_default().insert(addr);
-            }
-            "UNSUB" => {
-                if let Some(channel_subs) = subs.get_mut(&channel_name) {
-                    channel_subs.remove(&addr);
-                    if channel_subs.is_empty() {
-                        subs.remove(&channel_name);
+                    if rt_guard.is_none() {
+                        info!("Attempting to start server via menu...");
+                        let rt = Runtime::new().expect("Failed to create Tokio runtime");
+                        let handle_for_spawn_call = rt.handle().clone();
+                        let handle_for_async_block = rt.handle().clone();
+                        *rt_guard = Some(rt); 
+
+                        // Clone channels and MIDI handler needed for the new server task
+                        let shutdown_rx_for_task = server_shutdown_rx_clone_for_start.clone();
+                        let status_tx_for_task = server_status_tx_clone_for_start.clone();
+                        let midi_handler_for_task = midi_handler_clone_for_event_loop.clone(); // Clone for server task
+
+                        let task = handle_for_spawn_call.spawn(async move {
+                            status_tx_for_task.send(true).unwrap_or_else(|e| error!("Failed to send server start status: {}",e));
+                            // Pass midi_handler_for_task to run_server_application
+                            // The signature of run_server_application will need to be updated
+                            let result = server::run_server_application(
+                                handle_for_async_block, 
+                                shutdown_rx_for_task,
+                                midi_handler_for_task // New argument
+                            ).await;
+                            status_tx_for_task.send(false).unwrap_or_else(|e| error!("Failed to send server stop status: {}",e));
+                            result
+                        });
+                        *task_guard = Some(task);
+                        info!("Server start initiated via menu.");
+                    } else {
+                        warn!("Server is already running (menu).");
                     }
                 }
+                MENU_ITEM_STOP_ID => {
+                    let mut rt_guard = rt_handle_arc_clone.lock().unwrap();
+                    let mut task_guard = server_task_handle_arc_clone.lock().unwrap();
+
+                    if let Some(rt) = rt_guard.take() {
+                        info!("Attempting to stop server via menu...");
+                        if let Some(task_handle) = task_guard.take() {
+                            server_shutdown_tx_clone.send(()).unwrap_or_else(|e| error!("Failed to send server shutdown signal: {}",e));
+                            rt.block_on(async {
+                                if let Err(e) = task_handle.await {
+                                    error!("Server task failed to join: {:?}", e);
+                                }
+                            });
+                        }
+                        rt.shutdown_background();
+                        info!("Server stop initiated via menu.");
+                    } else {
+                        warn!("Server is not running (menu).");
+                    }
+                }
+                MENU_ITEM_QUIT_ID => {
+                    info!("Quit menu item selected. Setting quit flag.");
+                    quit_flag_clone_for_event_loop.store(true, Ordering::SeqCst);
+                    // The actual server stop and exit will happen at the start of the next loop iteration.
+                }
+                MENU_ITEM_RELOAD_MIDI_ID => {
+                    info!("Reload MIDI Mappings menu item selected.");
+                    match midi_handler_clone_for_event_loop.lock() {
+                        Ok(mut handler) => {
+                            if let Err(e) = handler.reload_mappings() {
+                                error!("Failed to reload MIDI mappings: {:?}", e);
+                            } else {
+                                info!("MIDI mappings reloaded successfully via menu.");
+                            }
+                        }
+                        Err(e) => {
+                            error!("Failed to lock MIDI handler for reloading mappings: {:?}", e);
+                        }
+                    }
+                }
+                _ => {
+                    warn!("Unhandled menu event id: {:?}", menu_event.id);
+                }
             }
-            "PUB" => { /* No change needed for this helper's scope */ }
-            _ => { /* Unknown action */ }
-        }
-    }
-
-    #[test]
-    fn test_subscribe_new_channel() {
-        let mut subs = HashMap::new(); // Uses std HashMap for this logic test
-        let client_addr = create_mock_addr(10001);
-        let channel = "test_channel".to_string();
-        process_message_logic(client_addr, &format!("SUB:{}", channel), &mut subs);
-        assert!(subs.contains_key(&channel));
-        assert_eq!(subs.get(&channel).unwrap().len(), 1);
-        assert!(subs.get(&channel).unwrap().contains(&client_addr));
-    }
-
-    #[test]
-    fn test_subscribe_existing_channel() {
-        let mut subs = HashMap::new(); // Uses std HashMap
-        let client1_addr = create_mock_addr(10001);
-        let client2_addr = create_mock_addr(10002);
-        let channel = "test_channel".to_string();
-        process_message_logic(client1_addr, &format!("SUB:{}", channel), &mut subs);
-        process_message_logic(client2_addr, &format!("SUB:{}", channel), &mut subs);
-        assert!(subs.contains_key(&channel));
-        assert_eq!(subs.get(&channel).unwrap().len(), 2);
-    }
-
-    #[test]
-    fn test_subscribe_same_client_twice() {
-        let mut subs = HashMap::new(); // Uses std HashMap
-        let client_addr = create_mock_addr(10001);
-        let channel = "test_channel".to_string();
-        process_message_logic(client_addr, &format!("SUB:{}", channel), &mut subs);
-        process_message_logic(client_addr, &format!("SUB:{}", channel), &mut subs);
-        assert_eq!(subs.get(&channel).unwrap().len(), 1);
-    }
-
-    #[test]
-    fn test_unsubscribe_from_channel() {
-        let mut subs = HashMap::new(); // Uses std HashMap
-        let client1_addr = create_mock_addr(10001);
-        let client2_addr = create_mock_addr(10002);
-        let channel = "test_channel".to_string();
-        process_message_logic(client1_addr, &format!("SUB:{}", channel), &mut subs);
-        process_message_logic(client2_addr, &format!("SUB:{}", channel), &mut subs);
-        process_message_logic(client1_addr, &format!("UNSUB:{}", channel), &mut subs);
-        assert_eq!(subs.get(&channel).unwrap().len(), 1);
-        assert!(!subs.get(&channel).unwrap().contains(&client1_addr));
-    }
-
-    #[test]
-    fn test_unsubscribe_last_client_removes_channel() {
-        let mut subs = HashMap::new(); // Uses std HashMap
-        let client_addr = create_mock_addr(10001);
-        let channel = "test_channel".to_string();
-        process_message_logic(client_addr, &format!("SUB:{}", channel), &mut subs);
-        process_message_logic(client_addr, &format!("UNSUB:{}", channel), &mut subs);
-        assert!(!subs.contains_key(&channel));
-    }
-
-    #[test]
-    fn test_unsubscribe_from_non_existent_channel() {
-        let mut subs = HashMap::new(); // Uses std HashMap
-        let client_addr = create_mock_addr(10001);
-        process_message_logic(client_addr, "UNSUB:test_channel", &mut subs);
-        assert!(!subs.contains_key("test_channel"));
-    }
-
-    #[test]
-    fn test_unsubscribe_non_subscribed_client_from_existing_channel() {
-        let mut subs = HashMap::new(); // Uses std HashMap
-        let client1_addr = create_mock_addr(10001);
-        let client2_addr = create_mock_addr(10002);
-        let channel = "test_channel".to_string();
-        process_message_logic(client1_addr, &format!("SUB:{}", channel), &mut subs);
-        process_message_logic(client2_addr, &format!("UNSUB:{}", channel), &mut subs); // Client 2 was not subscribed
-        assert_eq!(subs.get(&channel).unwrap().len(), 1); // Client 1 should still be there
-    }
-    
-    // Helper to get a free port for test server
-    async fn bind_to_free_port() -> Result<(Arc<UdpSocket>, SocketAddr), std::io::Error> {
-        let socket = UdpSocket::bind("127.0.0.1:0").await?;
-        let addr = socket.local_addr()?;
-        Ok((Arc::new(socket), addr))
-    }
-
-    #[tokio::test]
-    async fn test_integration_pub_sub() {
-        // Initialize logger for test, if desired (e.g., for debugging test failures)
-        // let _ = env_logger::builder().is_test(true).try_init();
-
-        // 1. Start the server logic in a background task on a free port
-        let (server_socket, server_addr) = bind_to_free_port().await.expect("Failed to bind server socket");
-        // Use DashMap for the integration test's subscriber map
-        let server_subscribers: Subscribers = Arc::new(DashMap::new()); 
-        
-        let server_handle = tokio::spawn(run_server_processing_loop(
-            server_socket.clone(), 
-            server_subscribers.clone(), // Clone Arc<DashMap>
-        ));
-
-        sleep(Duration::from_millis(50)).await; // Allow server to start
-
-        // 2. Create subscriber client
-        let subscriber_socket = UdpSocket::bind("127.0.0.1:0").await.expect("Failed to bind subscriber socket");
-        let subscriber_addr = subscriber_socket.local_addr().unwrap();
-        let channel_name = "news";
-        let sub_message = format!("SUB:{}", channel_name);
-        subscriber_socket.send_to(sub_message.as_bytes(), server_addr).await.expect("Subscriber failed to send SUB");
-        
-        sleep(Duration::from_millis(50)).await; // Give time for SUB to be processed
-
-        // Verify subscription on server side
-        {
-            // Access DashMap directly
-            assert!(server_subscribers.get(channel_name).expect("Channel not found after SUB").value().contains(&subscriber_addr));
         }
 
-        // 3. Create publisher client
-        let publisher_socket = UdpSocket::bind("127.0.0.1:0").await.expect("Failed to bind publisher socket");
-        let pub_payload = "hello world";
-        let pub_message = format!("PUB:{}:{}", channel_name, pub_payload);
-        publisher_socket.send_to(pub_message.as_bytes(), server_addr).await.expect("Publisher failed to send PUB");
-
-        // 4. Subscriber receives the message
-        let mut recv_buf = [0; 1024];
-        let timeout_duration = Duration::from_secs(1);
-
-        match tokio::time::timeout(timeout_duration, subscriber_socket.recv_from(&mut recv_buf)).await {
-            Ok(Ok((len, _remote_addr))) => {
-                let received_payload = std::str::from_utf8(&recv_buf[..len]).unwrap();
-                assert_eq!(received_payload, pub_payload);
-            }
-            Ok(Err(e)) => panic!("Subscriber recv_from failed: {}", e),
-            Err(_) => panic!("Subscriber timed out waiting for message"),
+        // Process tray icon events (e.g., clicks on the icon itself)
+        if let Ok(_tray_event) = TrayIconEvent::receiver().try_recv() { // Prefixed with _
+            // Removed verbose: info!("Tray event: {:?}", _tray_event);
+            // Handle tray icon clicks if needed, e.g.
+            // match _tray_event.event {
+            //    ClickType::Left => info!("Tray icon left clicked."),
+            //    ClickType::Right => info!("Tray icon right clicked."),
+            //    _ => {}
+            // }
         }
-        
-        // 5. Test UNSUB
-        let unsub_message = format!("UNSUB:{}", channel_name);
-        subscriber_socket.send_to(unsub_message.as_bytes(), server_addr).await.expect("Subscriber failed to send UNSUB");
-        sleep(Duration::from_millis(100)).await; // Give more time for UNSUB and potential remove_if
-
-        // Verify unsubscription
-        {
-            // Check if channel is gone or subscriber is not in set
-            let channel_is_gone_or_client_removed = server_subscribers.get(channel_name)
-                .map_or(true, |entry| !entry.value().contains(&subscriber_addr));
-            assert!(channel_is_gone_or_client_removed, "Subscriber still present after UNSUB or channel not properly cleaned");
-        }
-
-        // Now publish again, subscriber should not receive it
-        let pub_message2 = format!("PUB:{}:{}", channel_name, "another message");
-        publisher_socket.send_to(pub_message2.as_bytes(), server_addr).await.expect("Publisher failed to send PUB2");
-        
-        match tokio::time::timeout(Duration::from_millis(200), subscriber_socket.recv_from(&mut recv_buf)).await {
-            Ok(Ok((len, _))) => {
-                let received_payload = std::str::from_utf8(&recv_buf[..len]).unwrap();
-                panic!("Subscriber received message after unsubscribing: {}", received_payload);
-            }
-            Ok(Err(_e)) => { /* Expected: recv_from error */ },
-            Err(_) => { /* Expected: timeout */ info!("Correctly timed out after unsubscribe."); }
-        }
-
-        server_handle.abort();
-    }
+        // No need for thread::sleep, ControlFlow::Poll handles waiting.
+    });
+    // event_loop.run is blocking and will typically not return.
+    // The program exits when ControlFlow::Exit is set.
+    // Thus, an Ok(()) here would be unreachable.
 }
